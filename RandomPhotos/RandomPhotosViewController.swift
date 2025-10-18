@@ -20,10 +20,9 @@ class RandomPhotosViewController: UIViewController {
     private let downloadOperations = DownloadOperations()
     
     private lazy var collectionView: UICollectionView = {
-        let layout = PaginationLayout()
+        let layout = PaginationLayout(columns: columns, rows: rows, spacing: spacing)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white // Changed from .systemBackground to .white
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
@@ -59,12 +58,18 @@ class RandomPhotosViewController: UIViewController {
         let reloadButton = UIBarButtonItem(title: "Reload All", style: .plain, target: self, action: #selector(reloadButtonTapped))
         navigationItem.rightBarButtonItems = [addButton, reloadButton]
     }
+
+    private func scrollToLastItem() {
+        let lastItemIndexPath = IndexPath(item: photos.count - 1, section: 0)
+        collectionView.scrollToItem(at: lastItemIndexPath, at: .centeredHorizontally, animated: true)
+    }
     
     @objc private func addButtonTapped() {
         if let url = URL(string: "https://picsum.photos/200/200") {
             photos.append(PhotoRecord(url: url))
             collectionView.reloadData()
         }
+        scrollToLastItem()
     }
     
     @objc private func reloadButtonTapped() {
@@ -98,7 +103,7 @@ class RandomPhotosViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension RandomPhotosViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let itemsPerPage = 70 // 7 columns * 10 rows
+        let itemsPerPage = columns * rows
         let numberOfPages = Int(ceil(Double(photos.count) / Double(itemsPerPage)))
         return numberOfPages * itemsPerPage
     }
