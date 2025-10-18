@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 enum PhotoRecordState {
-    case new, downloading, success, failed
+    case new, downloading, success, failed, empty
 }
 
 class PhotoRecord {

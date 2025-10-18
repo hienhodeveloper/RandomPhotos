@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		856C21D0FD1C9D77F9057B83 /* Pods_RandomPhotos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB8929AE3BC0FC15B2C4D8 /* Pods_RandomPhotos.framework */; };
+		4F0A732A6FFD0229B835E52E /* Pods_RandomPhotos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D9CE757881E89362488D7B /* Pods_RandomPhotos.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		303BA57E3D19907C643C32C6 /* Pods-RandomPhotos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RandomPhotos.debug.xcconfig"; path = "Target Support Files/Pods-RandomPhotos/Pods-RandomPhotos.debug.xcconfig"; sourceTree = "<group>"; };
-		739C326AEEE480009605B974 /* Pods-RandomPhotos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RandomPhotos.release.xcconfig"; path = "Target Support Files/Pods-RandomPhotos/Pods-RandomPhotos.release.xcconfig"; sourceTree = "<group>"; };
+		29EE63E7B62AA5EE137B0E0B /* Pods-RandomPhotos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RandomPhotos.release.xcconfig"; path = "Target Support Files/Pods-RandomPhotos/Pods-RandomPhotos.release.xcconfig"; sourceTree = "<group>"; };
+		73D9CE757881E89362488D7B /* Pods_RandomPhotos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RandomPhotos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C990842EA3EF0C00F87782 /* RandomPhotos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RandomPhotos.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8CBB8929AE3BC0FC15B2C4D8 /* Pods_RandomPhotos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RandomPhotos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB5A5DB638F3E0532E706486 /* Pods-RandomPhotos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RandomPhotos.debug.xcconfig"; path = "Target Support Files/Pods-RandomPhotos/Pods-RandomPhotos.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				856C21D0FD1C9D77F9057B83 /* Pods_RandomPhotos.framework in Frameworks */,
+				4F0A732A6FFD0229B835E52E /* Pods_RandomPhotos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,8 +53,8 @@
 		2F63739170739E2FDFE33D0A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				303BA57E3D19907C643C32C6 /* Pods-RandomPhotos.debug.xcconfig */,
-				739C326AEEE480009605B974 /* Pods-RandomPhotos.release.xcconfig */,
+				AB5A5DB638F3E0532E706486 /* Pods-RandomPhotos.debug.xcconfig */,
+				29EE63E7B62AA5EE137B0E0B /* Pods-RandomPhotos.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -65,7 +65,7 @@
 				84C990862EA3EF0C00F87782 /* RandomPhotos */,
 				84C990852EA3EF0C00F87782 /* Products */,
 				2F63739170739E2FDFE33D0A /* Pods */,
-				A2C7D44FADA8F7F9D825D762 /* Frameworks */,
+				B7F3D4B056D3EEAB66936048 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,10 +77,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A2C7D44FADA8F7F9D825D762 /* Frameworks */ = {
+		B7F3D4B056D3EEAB66936048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8CBB8929AE3BC0FC15B2C4D8 /* Pods_RandomPhotos.framework */,
+				73D9CE757881E89362488D7B /* Pods_RandomPhotos.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -92,11 +92,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84C990972EA3EF0D00F87782 /* Build configuration list for PBXNativeTarget "RandomPhotos" */;
 			buildPhases = (
-				E2E553B3DCCB2B21BD1ACAAA /* [CP] Check Pods Manifest.lock */,
+				A8AA08E90E64642AABA56CB2 /* [CP] Check Pods Manifest.lock */,
 				84C990802EA3EF0C00F87782 /* Sources */,
 				84C990812EA3EF0C00F87782 /* Frameworks */,
 				84C990822EA3EF0C00F87782 /* Resources */,
-				352B09698B50E512118DD7B9 /* [CP] Embed Pods Frameworks */,
+				14E9672C7322C31D77FFB44F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -155,7 +155,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		352B09698B50E512118DD7B9 /* [CP] Embed Pods Frameworks */ = {
+		14E9672C7322C31D77FFB44F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -172,7 +172,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RandomPhotos/Pods-RandomPhotos-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E2E553B3DCCB2B21BD1ACAAA /* [CP] Check Pods Manifest.lock */ = {
+		A8AA08E90E64642AABA56CB2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -209,20 +209,19 @@
 /* Begin XCBuildConfiguration section */
 		84C990982EA3EF0D00F87782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 303BA57E3D19907C643C32C6 /* Pods-RandomPhotos.debug.xcconfig */;
+			baseConfigurationReference = AB5A5DB638F3E0532E706486 /* Pods-RandomPhotos.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B9C7RXV7S2;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RandomPhotos/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -238,20 +237,19 @@
 		};
 		84C990992EA3EF0D00F87782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 739C326AEEE480009605B974 /* Pods-RandomPhotos.release.xcconfig */;
+			baseConfigurationReference = 29EE63E7B62AA5EE137B0E0B /* Pods-RandomPhotos.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B9C7RXV7S2;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RandomPhotos/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
