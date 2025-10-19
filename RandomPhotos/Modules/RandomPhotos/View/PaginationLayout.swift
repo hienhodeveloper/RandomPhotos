@@ -37,14 +37,13 @@ class PaginationLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else { return }
         
         let totalSpacingX = CGFloat(columns - 1) * spacing
-        let availableWidth = collectionView.bounds.width - (horizontalPadding * 2) // Left and right padding
+        let availableWidth = collectionView.bounds.width - (horizontalPadding * 2)
         let itemWidth = (availableWidth - totalSpacingX) / CGFloat(columns)
         itemSize = CGSize(width: itemWidth, height: itemWidth)
         
         layoutAttributes.removeAll()
         
         let numberOfItems = collectionView.numberOfItems(inSection: 0)
-        let numberOfPages = Int(ceil(Double(numberOfItems) / Double(itemsPerPage)))
         
         for item in 0..<numberOfItems {
             let indexPath = IndexPath(item: item, section: 0)

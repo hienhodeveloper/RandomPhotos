@@ -8,6 +8,20 @@
 import UIKit
 import SnapKit
 
+enum PhotoRecordState {
+    case new, downloading, success, failed, empty
+}
+
+class PhotoRecord {
+    let url: URL
+    var state = PhotoRecordState.new
+    var image = UIImage(named: "Placeholder")
+    
+    init(url:URL) {
+        self.url = url
+    }
+}
+
 class PhotoCell: UICollectionViewCell {
     private var photoRecord: PhotoRecord?
     private let imageView = UIImageView()
@@ -27,9 +41,7 @@ class PhotoCell: UICollectionViewCell {
         contentView.addSubview(imageView)
         contentView.addSubview(activityIndicator)
         contentView.addSubview(failedImageView)
-        
-        contentView.backgroundColor = .red
-        
+                
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = 7
         imageView.layer.masksToBounds = true
@@ -50,19 +62,20 @@ class PhotoCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        super.prepareForReuse()
         imageView.image = nil
         failedImageView.isHidden = true
         activityIndicator.stopAnimating()
+        super.prepareForReuse()
     }
     
     func setup(photoRecord: PhotoRecord) {
         failedImageView.isHidden = true
         self.photoRecord = photoRecord
         
-        if photoRecord.state == .downloading {
+        if photoRecord.state == .downloading || photoRecord.state == .new {
             activityIndicator.startAnimating()
         } else if photoRecord.state == .success {
+            activityIndicator.stopAnimating()
             imageView.image = photoRecord.image
         } else if photoRecord.state == .failed {
             activityIndicator.stopAnimating()
@@ -73,7 +86,6 @@ class PhotoCell: UICollectionViewCell {
             contentView.backgroundColor = .clear
         } else {
             activityIndicator.stopAnimating()
-            contentView.backgroundColor = .red
         }
     }
 }

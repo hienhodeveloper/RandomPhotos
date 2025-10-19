@@ -1,20 +1,6 @@
 import Foundation
 import UIKit
 
-enum PhotoRecordState {
-    case new, downloading, success, failed, empty
-}
-
-class PhotoRecord {
-    let url: URL
-    var state = PhotoRecordState.new
-    var image = UIImage(named: "Placeholder")
-    
-    init(url:URL) {
-        self.url = url
-    }
-}
-
 class DownloadOperations {
     lazy var downloadsInProgress: [IndexPath: Operation] = [:]
     lazy var downloadQueue: OperationQueue = {
@@ -23,6 +9,15 @@ class DownloadOperations {
         queue.maxConcurrentOperationCount = 70
         return queue
     }()
+
+    func addOperation(_ operation: Operation) {
+        downloadQueue.addOperation(operation)
+    }
+
+    func cancelAllDownloads() {
+        downloadQueue.cancelAllOperations()
+        downloadsInProgress.removeAll()
+    }
 }
 
 class ImageDownloader: Operation, @unchecked Sendable {

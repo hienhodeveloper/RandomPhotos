@@ -8,16 +8,21 @@
 import UIKit
 import SnapKit
 
-class RandomPhotosViewController: UIViewController {
-    
+protocol RandomPhotosViewProtocol: AnyObject {
+    func reloadPhotos()
+    func reloadCellAtIndexPath(indexPath: IndexPath)
+    func scrollToFirstItem()
+    func scrollToLastItem()
+}
+
+class RandomPhotosViewController: UIViewController, RandomPhotosViewProtocol {
+    private lazy var presenter: RandomPhotosPresenter = RandomPhotosPresenter(view: self)
+
     // MARK: - Properties
     private let spacing: CGFloat = 2
     private let columns = 7
     private let rows = 10
     private let reuseId = "PhotoCell"
-    
-    private var photos: [PhotoRecord] = []
-    private let downloadOperations = DownloadOperations()
     
     private lazy var collectionView: UICollectionView = {
         let layout = PaginationLayout(columns: columns, rows: rows, spacing: spacing)
@@ -30,23 +35,13 @@ class RandomPhotosViewController: UIViewController {
         return collectionView
     }()
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         title = "Photos"
-        view.backgroundColor = .white // Added white background for main view
+        view.backgroundColor = .white
+        presenter.reloadAll()
         setupNavigationBar()
         setupCollectionView()
-        
-        // Load 140 random image URLs
-        for _ in 0..<140 {
-            if let url = URL(string: "https://picsum.photos/200/200") {
-                photos.append(PhotoRecord(url: url))
-            }
-        }
-
-        collectionView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,31 +50,16 @@ class RandomPhotosViewController: UIViewController {
     
     private func setupNavigationBar() {
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
-        let reloadButton = UIBarButtonItem(title: "Reload All", style: .plain, target: self, action: #selector(reloadButtonTapped))
+        let reloadButton = UIBarButtonItem(title: "Reload All", style: .plain, target: self, action: #selector(reloadAllButtonTapped))
         navigationItem.rightBarButtonItems = [addButton, reloadButton]
     }
 
-    private func scrollToLastItem() {
-        let lastItemIndexPath = IndexPath(item: photos.count - 1, section: 0)
-        collectionView.scrollToItem(at: lastItemIndexPath, at: .centeredHorizontally, animated: true)
-    }
-    
     @objc private func addButtonTapped() {
-        if let url = URL(string: "https://picsum.photos/200/200") {
-            photos.append(PhotoRecord(url: url))
-            collectionView.reloadData()
-        }
-        scrollToLastItem()
+        presenter.addAPhoto()
     }
     
-    @objc private func reloadButtonTapped() {
-        photos.removeAll()
-        for _ in 0..<140 {
-            if let url = URL(string: "https://picsum.photos/200/200") {
-                photos.append(PhotoRecord(url: url))
-            }
-        }
-        collectionView.reloadData()
+    @objc private func reloadAllButtonTapped() {
+        presenter.reloadAll()
     }
     
     private func setupCollectionView() {
@@ -97,14 +77,37 @@ class RandomPhotosViewController: UIViewController {
             make.height.equalTo(collectionViewHeight)
         }
     }
+
+    func updatePhotos(photos: [PhotoRecord]) {
+        collectionView.reloadData()
+    }
+
+    func scrollToFirstItem() {
+        guard !presenter.photos.isEmpty else { return }
+        let firstItemIndexPath = IndexPath(item: 0, section: 0)
+        collectionView.scrollToItem(at: firstItemIndexPath, at: .centeredHorizontally, animated: true)
+    }
+
+    func scrollToLastItem() {
+        guard !presenter.photos.isEmpty else { return }
+        let lastItemIndexPath = IndexPath(item: presenter.photos.count - 1, section: 0)
+        collectionView.scrollToItem(at: lastItemIndexPath, at: .centeredHorizontally, animated: true)
+    }
     
+    func reloadPhotos() {
+        collectionView.reloadData()
+    }
+    
+    func reloadCellAtIndexPath(indexPath: IndexPath) {
+        collectionView.reloadItems(at: [indexPath])
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 extension RandomPhotosViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let itemsPerPage = columns * rows
-        let numberOfPages = Int(ceil(Double(photos.count) / Double(itemsPerPage)))
+        let numberOfPages = Int(ceil(Double(presenter.photos.count) / Double(itemsPerPage)))
         return numberOfPages * itemsPerPage
     }
     
@@ -116,11 +119,9 @@ extension RandomPhotosViewController: UICollectionViewDataSource, UICollectionVi
             return UICollectionViewCell()
         }
         
-        // Nếu item index vượt quá số lượng photos, hiển thị empty cell
-        if indexPath.item < photos.count {
-            cell.setup(photoRecord: photos[indexPath.item])
+        if indexPath.item < presenter.photos.count {
+            cell.setup(photoRecord: presenter.photos[indexPath.item])
         } else {
-            // Tạo empty PhotoRecord để hiển thị cell rỗng
             let emptyPhoto = PhotoRecord(url: URL(string: "about:blank")!)
             emptyPhoto.state = .empty
             cell.setup(photoRecord: emptyPhoto)
