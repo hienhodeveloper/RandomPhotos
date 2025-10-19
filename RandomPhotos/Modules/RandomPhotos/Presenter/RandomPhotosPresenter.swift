@@ -13,7 +13,7 @@ class RandomPhotosPresenter {
     
     private let view: RandomPhotosViewProtocol
     private(set) var photos: [PhotoRecord] = []
-    private(set) var downloadOperations = DownloadOperations()
+    private let downloadOperations = DownloadPhotoOperations(maxConcurrentOperationCount: 30)
     
     init(view: RandomPhotosViewProtocol) {
         self.view = view
@@ -39,6 +39,14 @@ class RandomPhotosPresenter {
         view.reloadPhotos()
         view.scrollToFirstItem()
         startDownloadPhotos(for: photos)
+    }
+
+    func retryDownload(for indexPath: IndexPath) {
+        guard indexPath.item < photos.count else { return }
+        let photoRecord = photos[indexPath.item]
+        photoRecord.state = .downloading
+        view.reloadCellAtIndexPath(indexPath: indexPath)
+        startDownload(for: photoRecord, at: indexPath)
     }
     
     private func startDownloadPhotos(for photoRecords: [PhotoRecord]) {

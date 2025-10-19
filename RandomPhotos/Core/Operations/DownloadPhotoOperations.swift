@@ -1,14 +1,21 @@
 import Foundation
 import UIKit
 
-class DownloadOperations {
+class DownloadPhotoOperations {
     lazy var downloadsInProgress: [IndexPath: Operation] = [:]
     lazy var downloadQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "Download Photos"
-        queue.maxConcurrentOperationCount = 70
+        queue.maxConcurrentOperationCount = maxConcurrentOperationCount
+        queue.qualityOfService = .userInitiated
         return queue
     }()
+    
+    private let maxConcurrentOperationCount: Int
+    
+    init(maxConcurrentOperationCount: Int = ProcessInfo.processInfo.processorCount) {
+        self.maxConcurrentOperationCount = maxConcurrentOperationCount
+    }
 
     func addOperation(_ operation: Operation) {
         downloadQueue.addOperation(operation)

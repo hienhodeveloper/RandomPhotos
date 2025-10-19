@@ -17,8 +17,6 @@ protocol RandomPhotosViewProtocol: AnyObject {
 
 class RandomPhotosViewController: UIViewController, RandomPhotosViewProtocol {
     private lazy var presenter: RandomPhotosPresenter = RandomPhotosPresenter(view: self)
-
-    // MARK: - Properties
     private let spacing: CGFloat = 2
     private let columns = 7
     private let rows = 10
@@ -26,7 +24,6 @@ class RandomPhotosViewController: UIViewController, RandomPhotosViewProtocol {
     
     private lazy var collectionView: UICollectionView = {
         let layout = PaginationLayout(columns: columns, rows: rows, spacing: spacing)
-        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
@@ -120,7 +117,10 @@ extension RandomPhotosViewController: UICollectionViewDataSource, UICollectionVi
         }
         
         if indexPath.item < presenter.photos.count {
-            cell.setup(photoRecord: presenter.photos[indexPath.item])
+            cell.setup(photoRecord: presenter.photos[indexPath.item], onRetryTapped: { [weak self] in
+                guard let self = self else { return }
+                self.presenter.retryDownload(for: indexPath)
+            })
         } else {
             let emptyPhoto = PhotoRecord(url: URL(string: "about:blank")!)
             emptyPhoto.state = .empty

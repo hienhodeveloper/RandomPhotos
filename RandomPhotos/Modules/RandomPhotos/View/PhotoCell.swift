@@ -15,7 +15,7 @@ enum PhotoRecordState {
 class PhotoRecord {
     let url: URL
     var state = PhotoRecordState.new
-    var image = UIImage(named: "Placeholder")
+    var image: UIImage?
     
     init(url:URL) {
         self.url = url
@@ -26,7 +26,8 @@ class PhotoCell: UICollectionViewCell {
     private var photoRecord: PhotoRecord?
     private let imageView = UIImageView()
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
-    private let failedImageView = UIImageView(image: UIImage(systemName: "xmark.circle.fill"))
+    private let retryButton = UIButton()
+    private var onRetryTapped: (() -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,7 +41,7 @@ class PhotoCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(imageView)
         contentView.addSubview(activityIndicator)
-        contentView.addSubview(failedImageView)
+        contentView.addSubview(retryButton)
                 
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = 7
@@ -54,38 +55,48 @@ class PhotoCell: UICollectionViewCell {
             make.center.equalToSuperview()
         }
 
-        failedImageView.isHidden = true
-        failedImageView.snp.makeConstraints { make in
+        retryButton.setImage(UIImage(systemName: "arrow.clockwise.circle.fill"), for: .normal)
+        retryButton.tintColor = .systemRed
+        retryButton.isHidden = true
+        retryButton.addTarget(self, action: #selector(retryTapped), for: .touchUpInside)
+        retryButton.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.size.equalTo(16)
+            make.size.equalTo(32)
         }
+    }
+    
+    @objc private func retryTapped() {
+        onRetryTapped?()
     }
     
     override func prepareForReuse() {
         imageView.image = nil
-        failedImageView.isHidden = true
+        retryButton.isHidden = true
         activityIndicator.stopAnimating()
+        onRetryTapped = nil
         super.prepareForReuse()
     }
     
-    func setup(photoRecord: PhotoRecord) {
-        failedImageView.isHidden = true
+    func setup(photoRecord: PhotoRecord, onRetryTapped: (() -> Void)? = nil) {
         self.photoRecord = photoRecord
+        self.onRetryTapped = onRetryTapped
         
-        if photoRecord.state == .downloading || photoRecord.state == .new {
+        retryButton.isHidden = true
+        imageView.image = nil
+        activityIndicator.stopAnimating()
+        contentView.backgroundColor = nil
+
+        switch photoRecord.state {
+        case .downloading, .new:
             activityIndicator.startAnimating()
-        } else if photoRecord.state == .success {
-            activityIndicator.stopAnimating()
+        case .success:
             imageView.image = photoRecord.image
-        } else if photoRecord.state == .failed {
-            activityIndicator.stopAnimating()
-            failedImageView.isHidden = false
-        } else if photoRecord.state == .empty {
-            activityIndicator.stopAnimating()
-            imageView.image = nil
+            
+        case .failed:
+            retryButton.isHidden = false
+            
+        case .empty:
             contentView.backgroundColor = .clear
-        } else {
-            activityIndicator.stopAnimating()
         }
     }
 }
