@@ -2,7 +2,7 @@
 
 A modern iOS app that displays random photos in a paginated grid layout with efficient image downloading and caching capabilities.
 
-<img width="1080" height="2340" alt="simulator_screenshot_E06DD8BC-BD57-498F-85BD-60F480F06EBF" src="https://github.com/user-attachments/assets/531107ec-abd9-4b3b-a6c5-d0fb0a0bcd5a" />
+<img width="340" height="970" alt="simulator_screenshot_E06DD8BC-BD57-498F-85BD-60F480F06EBF" src="https://github.com/user-attachments/assets/531107ec-abd9-4b3b-a6c5-d0fb0a0bcd5a" />
 
 DEMO:
 https://github.com/user-attachments/assets/5b6d0d9e-e265-44d0-a523-14f9ff8b8b86
