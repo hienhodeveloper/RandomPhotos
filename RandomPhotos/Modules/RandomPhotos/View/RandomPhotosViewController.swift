@@ -10,6 +10,7 @@ import SnapKit
 
 protocol RandomPhotosViewProtocol: AnyObject {
     func reloadPhotos()
+    func insertCellAtIndexPath(indexPath: IndexPath)
     func reloadCellAtIndexPath(indexPath: IndexPath)
     func scrollToFirstItem()
     func scrollToLastItem()
@@ -18,14 +19,13 @@ protocol RandomPhotosViewProtocol: AnyObject {
 class RandomPhotosViewController: UIViewController, RandomPhotosViewProtocol {
     private lazy var presenter: RandomPhotosPresenter = RandomPhotosPresenter(view: self)
     private let spacing: CGFloat = 2
-    private let columns = 7
-    private let rows = 10
+    private let columns = 7.0
+    private let rows = 10.0
     private let reuseId = "PhotoCell"
     
     private lazy var collectionView: UICollectionView = {
-        let layout = PaginationLayout(columns: columns, rows: rows, spacing: spacing)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.isPagingEnabled = true
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView.alwaysBounceVertical = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -62,16 +62,9 @@ class RandomPhotosViewController: UIViewController, RandomPhotosViewProtocol {
     private func setupCollectionView() {
         view.addSubview(collectionView)
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: reuseId)
-        let totalSpacingY = CGFloat(rows - 1) * spacing
-        let totalSpacingX = CGFloat(columns - 1) * spacing
-        
-        let itemWidth = (view.bounds.width - totalSpacingX) / CGFloat(columns)
-        let collectionViewHeight = itemWidth * CGFloat(rows) + totalSpacingY
-            
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(collectionViewHeight)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
 
@@ -98,14 +91,53 @@ class RandomPhotosViewController: UIViewController, RandomPhotosViewProtocol {
     func reloadCellAtIndexPath(indexPath: IndexPath) {
         collectionView.reloadItems(at: [indexPath])
     }
+
+    func insertCellAtIndexPath(indexPath: IndexPath) {
+        if collectionView.numberOfItems(inSection: 0) > presenter.photos.count {
+            collectionView.reloadItems(at: [indexPath])
+            return
+        }
+        reloadPhotos()
+    }
+    
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0 / columns),
+            heightDimension: .fractionalWidth(1.0 / columns)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
+        
+        let rowGroupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(1.0 / columns)
+        )
+        let rowGroup = NSCollectionLayoutGroup.horizontal(layoutSize: rowGroupSize, subitems: Array(repeating: item, count: Int(columns)))
+        
+        let pageGroupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(rows / columns)
+        )
+        let pageGroup = NSCollectionLayoutGroup.vertical(layoutSize: pageGroupSize, subitems: Array(repeating: rowGroup, count: Int(rows)))
+        
+        let section = NSCollectionLayoutSection(group: pageGroup)
+        section.orthogonalScrollingBehavior = .groupPaging
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
+        
+        return UICollectionViewCompositionalLayout(section: section)
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 extension RandomPhotosViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    var numberOfItemsInSection: Int {
         let itemsPerPage = columns * rows
         let numberOfPages = Int(ceil(Double(presenter.photos.count) / Double(itemsPerPage)))
-        return numberOfPages * itemsPerPage
+        return numberOfPages * Int(itemsPerPage)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return numberOfItemsInSection
     }
     
     func collectionView(

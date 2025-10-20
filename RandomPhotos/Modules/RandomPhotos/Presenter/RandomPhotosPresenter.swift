@@ -24,11 +24,18 @@ class RandomPhotosPresenter {
     func addAPhoto() {
         guard let url = URL(string: DEFAULT_RANDOM_PHOTO_URL) else { return }
         let photoRecord = PhotoRecord(url: url)
+
         photos.append(photoRecord)
-        view.reloadPhotos()
+
         let indexPath = IndexPath(item: photos.count - 1, section: 0)
+
+        view.insertCellAtIndexPath(indexPath: indexPath)
+
         startDownload(for: photoRecord, at: indexPath)
-        view.scrollToLastItem()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            self?.view.scrollToLastItem()
+        }
     }
     
     func reloadAll() {
