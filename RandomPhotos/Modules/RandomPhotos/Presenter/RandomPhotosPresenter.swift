@@ -10,13 +10,15 @@ import Foundation
 class RandomPhotosPresenter {
     private let DEFAULT_RELOAD_ALL_COUNT = 140
     private let DEFAULT_RANDOM_PHOTO_URL = "https://picsum.photos/200/200"
+    private let MAX_CONCURRENT_OPERATION_COUNT = 30
     
     private let view: RandomPhotosViewProtocol
     private(set) var photos: [PhotoRecord] = []
-    private let downloadOperations = DownloadPhotoOperations(maxConcurrentOperationCount: 30)
+    private let downloadOperations: DownloadPhotoOperations
     
     init(view: RandomPhotosViewProtocol) {
         self.view = view
+        downloadOperations = DownloadPhotoOperations(maxConcurrentOperationCount: MAX_CONCURRENT_OPERATION_COUNT)
     }
     
     func addAPhoto() {
