@@ -123,7 +123,7 @@ extension RandomPhotosViewController: UICollectionViewDataSource, UICollectionVi
             })
         } else {
             let emptyPhoto = PhotoRecord(url: URL(string: "about:blank")!)
-            emptyPhoto.state = .empty
+            emptyPhoto.state = .blank
             cell.setup(photoRecord: emptyPhoto)
         }
         

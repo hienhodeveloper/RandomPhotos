@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 enum PhotoRecordState {
-    case new, downloading, success, failed, empty
+    case new, downloading, success, failed, blank
 }
 
 class PhotoRecord {
@@ -95,7 +95,7 @@ class PhotoCell: UICollectionViewCell {
         case .failed:
             retryButton.isHidden = false
             
-        case .empty:
+        case .blank:
             contentView.backgroundColor = .clear
         }
     }
